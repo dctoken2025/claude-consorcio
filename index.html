@@ -1,506 +1,521 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>IA + Blockchain no Consórcio Brasileiro — Oportunidades Reais</title>
-  <style>
-    :root {
-      --brand: #6C47FF;
-      --brand-dark: #4A2FD6;
-      --brand-light: #EDE9FF;
-      --accent: #00C9A7;
-      --accent-dark: #00A88A;
-      --chain: #F59E0B;
-      --chain-light: #FEF3C7;
-      --red: #EF4444;
-      --red-light: #FEE2E2;
-      --green: #10B981;
-      --green-light: #D1FAE5;
-      --text: #1A1A2E;
-      --muted: #6B7280;
-      --bg: #F9FAFB;
-      --white: #FFFFFF;
-      --border: #E5E7EB;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador de Consórcio — Administradora</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  :root {
+    --primary: #1a56db;
+    --primary-dark: #1e429f;
+    --success: #057a55;
+    --danger: #e02424;
+    --warning: #c27803;
+    --bg: #f9fafb;
+    --card: #ffffff;
+    --border: #e5e7eb;
+    --text: #111827;
+    --muted: #6b7280;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); }
 
-    /* HERO */
-    .hero {
-      background: linear-gradient(135deg, #1A1A2E 0%, #2D1B69 50%, #6C47FF 100%);
-      color: white; padding: 90px 24px 110px; text-align: center; position: relative; overflow: hidden;
-    }
-    .hero::after {
-      content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 60px;
-      background: var(--bg); clip-path: ellipse(55% 100% at 50% 100%);
-    }
-    .hero-badge {
-      display: inline-block; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25);
-      border-radius: 999px; padding: 6px 18px; font-size: 12px; font-weight: 700;
-      letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 28px;
-    }
-    .hero h1 { font-size: clamp(2rem, 5vw, 3.6rem); font-weight: 900; line-height: 1.1; max-width: 860px; margin: 0 auto 20px; }
-    .hero h1 em { font-style: normal; color: #A5F3E8; }
-    .hero p { font-size: 1.15rem; opacity: 0.8; max-width: 620px; margin: 0 auto 50px; }
-    .hero-stats { display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; }
-    .stat strong { display: block; font-size: 2.4rem; font-weight: 900; color: #A5F3E8; }
-    .stat span { font-size: 0.82rem; opacity: 0.7; }
+  header {
+    background: var(--primary-dark);
+    color: white;
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  header h1 { font-size: 1.4rem; font-weight: 700; }
+  header p { font-size: 0.85rem; opacity: 0.8; }
 
-    /* LAYOUT */
-    .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
-    section { padding: 88px 0; }
-    section.alt { background: white; }
+  .container { max-width: 1400px; margin: 0 auto; padding: 24px 16px; }
 
-    .section-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--brand); margin-bottom: 8px; }
-    .section-title { font-size: clamp(1.7rem, 3vw, 2.5rem); font-weight: 900; line-height: 1.15; margin-bottom: 14px; }
-    .section-sub { font-size: 1rem; color: var(--muted); max-width: 580px; margin-bottom: 52px; }
+  .grid-params { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px; }
 
-    /* CARDS */
-    .grid { display: grid; gap: 20px; }
-    .g3 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
-    .g2 { grid-template-columns: repeat(auto-fit, minmax(440px, 1fr)); }
-    .g4 { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .card h3 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 16px; }
 
-    .card { background: white; border-radius: 18px; padding: 28px; box-shadow: 0 2px 20px rgba(0,0,0,0.06); border: 1px solid var(--border); transition: transform .2s, box-shadow .2s; }
-    .card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(108,71,255,0.12); }
-    .card-icon { width: 50px; height: 50px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 18px; }
-    .icon-purple { background: var(--brand-light); }
-    .icon-green { background: var(--green-light); }
-    .icon-orange { background: var(--chain-light); }
-    .icon-red { background: var(--red-light); }
-    .card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
-    .card p { font-size: 0.92rem; color: var(--muted); line-height: 1.65; }
-    .card .badge { display: inline-block; margin-top: 14px; font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
-    .badge-purple { background: var(--brand-light); color: var(--brand); }
-    .badge-green { background: var(--green-light); color: var(--green); }
-    .badge-red { background: var(--red-light); color: var(--red); }
-    .badge-orange { background: var(--chain-light); color: #B45309; }
+  .param { margin-bottom: 14px; }
+  .param label { display: flex; justify-content: space-between; font-size: 0.875rem; font-weight: 500; margin-bottom: 4px; }
+  .param label span { color: var(--primary); font-weight: 700; }
+  .param input[type=range] { width: 100%; accent-color: var(--primary); cursor: pointer; }
+  .param input[type=number] {
+    width: 100%; border: 1px solid var(--border); border-radius: 6px;
+    padding: 6px 10px; font-size: 0.875rem; outline: none;
+  }
+  .param input[type=number]:focus { border-color: var(--primary); }
 
-    /* DOR SECTION */
-    .pain-card { background: white; border-radius: 18px; padding: 28px; border: 1px solid var(--border); border-left: 4px solid var(--red); box-shadow: 0 2px 16px rgba(0,0,0,0.05); }
-    .pain-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; color: var(--text); }
-    .pain-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
-    .pain-card .data { font-size: 0.8rem; background: var(--red-light); color: var(--red); padding: 3px 10px; border-radius: 6px; display: inline-block; margin-top: 10px; font-weight: 600; }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .kpi {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+  }
+  .kpi .label { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
+  .kpi .value { font-size: 1.5rem; font-weight: 800; }
+  .kpi.green .value { color: var(--success); }
+  .kpi.red .value { color: var(--danger); }
+  .kpi.blue .value { color: var(--primary); }
+  .kpi.orange .value { color: var(--warning); }
+  .kpi .sub { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
 
-    /* KLUBI PROOF */
-    .proof-bar { background: linear-gradient(135deg, var(--accent) 0%, #00A88A 100%); border-radius: 20px; padding: 40px; color: white; }
-    .proof-bar h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 6px; }
-    .proof-bar p { opacity: 0.85; font-size: 0.95rem; margin-bottom: 28px; }
-    .proof-stats { display: flex; gap: 32px; flex-wrap: wrap; }
-    .proof-stat strong { display: block; font-size: 2rem; font-weight: 900; }
-    .proof-stat span { font-size: 0.8rem; opacity: 0.8; }
+  .breakeven-badge {
+    display: inline-block;
+    background: #ecfdf5;
+    color: var(--success);
+    border: 1px solid #a7f3d0;
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-left: 8px;
+  }
+  .breakeven-badge.no { background: #fef2f2; color: var(--danger); border-color: #fca5a5; }
 
-    /* BLOCKCHAIN */
-    .chain-card { background: white; border-radius: 18px; padding: 28px; border: 1px solid var(--chain-light); border-top: 4px solid var(--chain); box-shadow: 0 2px 16px rgba(245,158,11,0.08); transition: transform .2s; }
-    .chain-card:hover { transform: translateY(-3px); }
-    .chain-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; }
-    .chain-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.65; }
-    .stars { color: var(--chain); font-size: 0.85rem; margin-bottom: 10px; }
-    .chain-pill { background: var(--chain-light); color: #92400E; font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; display: inline-block; margin-top: 12px; }
+  .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  @media(max-width: 900px) { .charts-grid { grid-template-columns: 1fr; } }
+  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .chart-card h3 { font-size: 0.875rem; font-weight: 600; margin-bottom: 16px; }
 
-    /* ROADMAP */
-    .roadmap { display: flex; flex-direction: column; gap: 0; }
-    .rm-item { display: flex; gap: 24px; align-items: flex-start; }
-    .rm-line { display: flex; flex-direction: column; align-items: center; }
-    .rm-dot { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; flex-shrink: 0; }
-    .rm-connector { width: 2px; flex: 1; min-height: 32px; background: var(--border); margin: 4px 0; }
-    .rm-content { background: white; border-radius: 14px; padding: 22px 24px; border: 1px solid var(--border); flex: 1; margin-bottom: 16px; }
-    .rm-content h4 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
-    .rm-content p { font-size: 0.88rem; color: var(--muted); }
-    .rm-tag { font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; display: inline-block; margin-bottom: 8px; }
-    .phase-1 { background: #EDE9FF; color: var(--brand); }
-    .phase-2 { background: var(--green-light); color: #065F46; }
-    .phase-3 { background: var(--chain-light); color: #92400E; }
-    .dot-1 { background: var(--brand); color: white; }
-    .dot-2 { background: var(--green); color: white; }
-    .dot-3 { background: var(--chain); color: white; }
+  .table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .table-wrap h3 { font-size: 0.875rem; font-weight: 600; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+  th { background: #f3f4f6; padding: 10px 12px; text-align: right; font-weight: 600; white-space: nowrap; color: var(--muted); font-size: 0.75rem; text-transform: uppercase; }
+  th:first-child { text-align: center; }
+  td { padding: 9px 12px; text-align: right; border-top: 1px solid #f3f4f6; }
+  td:first-child { text-align: center; font-weight: 700; color: var(--primary); }
+  tr.breakeven-row { background: #ecfdf5; }
+  tr.breakeven-row td { font-weight: 700; }
+  .neg { color: var(--danger); }
+  .pos { color: var(--success); }
 
-    /* TABLE */
-    .matrix { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.9rem; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
-    .matrix th { background: var(--brand); color: white; padding: 14px 18px; text-align: left; font-weight: 700; font-size: 0.82rem; }
-    .matrix td { padding: 13px 18px; border-bottom: 1px solid var(--border); background: white; }
-    .matrix tr:last-child td { border-bottom: none; }
-    .matrix tr:nth-child(even) td { background: #FAFAFE; }
-    .level { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 0.75rem; font-weight: 700; }
-    .l-high { background: var(--green-light); color: #065F46; }
-    .l-med { background: var(--chain-light); color: #92400E; }
-    .l-low { background: var(--red-light); color: #991B1B; }
-    .l-ok { background: var(--green-light); color: #065F46; }
-    .l-reg { background: var(--chain-light); color: #92400E; }
-
-    /* QUOTE */
-    .quote-block { background: linear-gradient(135deg, #1A1A2E 0%, var(--brand) 100%); border-radius: 24px; padding: 48px; color: white; text-align: center; }
-    .quote-block blockquote { font-size: clamp(1.2rem, 2.5vw, 1.8rem); font-weight: 700; line-height: 1.4; max-width: 680px; margin: 0 auto 16px; }
-    .quote-block cite { opacity: 0.6; font-size: 0.85rem; font-style: normal; }
-
-    /* WARNING */
-    .warning-box { background: var(--chain-light); border: 1px solid #FCD34D; border-radius: 14px; padding: 20px 24px; display: flex; gap: 14px; align-items: flex-start; }
-    .warning-box .icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
-    .warning-box p { font-size: 0.9rem; color: #78350F; }
-    .warning-box strong { color: #92400E; }
-
-    footer { background: var(--text); color: rgba(255,255,255,0.45); text-align: center; padding: 28px; font-size: 0.82rem; }
-    footer strong { color: white; }
-
-    @media (max-width: 640px) {
-      .hero-stats { gap: 28px; }
-      .g2 { grid-template-columns: 1fr; }
-    }
-  </style>
+  .hint { font-size: 0.72rem; color: var(--muted); margin-top: 4px; }
+</style>
 </head>
 <body>
 
-<!-- ═══ HERO ═══ -->
-<div class="hero">
-  <div class="hero-badge">Análise de Mercado · Consórcio Brasileiro · 2026</div>
-  <h1>O maior mercado financeiro ignorado pelo Brasil<br><em>já está sendo transformado por IA</em></h1>
-  <p>R$ 500 bilhões em crédito ativo, 12,7 milhões de participantes, crescimento de 32% — e processos que ainda dependem de papel e ligação telefônica.</p>
-  <div class="hero-stats">
-    <div class="stat"><strong>R$ 500 Bi</strong><span>em créditos contratados (2025)</span></div>
-    <div class="stat"><strong>12,7 Mi</strong><span>participantes ativos — recorde histórico</span></div>
-    <div class="stat"><strong>+32%</strong><span>crescimento de crédito em 2025</span></div>
-    <div class="stat"><strong>2,35%</strong><span>inadimplência — menor da história</span></div>
+<header>
+  <div>
+    <h1>Simulador de Consórcio — Administradora</h1>
+    <p>Análise financeira mês a mês · Breakeven · Resultado operacional</p>
   </div>
+</header>
+
+<div class="container">
+
+  <!-- PARÂMETROS -->
+  <div class="grid-params">
+
+    <div class="card">
+      <h3>Grupo</h3>
+      <div class="param">
+        <label>Participantes <span id="lbl_participantes">200</span></label>
+        <input type="range" id="participantes" min="20" max="1000" step="10" value="200">
+      </div>
+      <div class="param">
+        <label>Prazo (meses) <span id="lbl_prazo">60</span></label>
+        <input type="range" id="prazo" min="12" max="240" step="12" value="60">
+      </div>
+      <div class="param">
+        <label>Valor do crédito (R$) <span id="lbl_credito">50.000</span></label>
+        <input type="range" id="credito" min="5000" max="500000" step="5000" value="50000">
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Taxas e Custos (%)</h3>
+      <div class="param">
+        <label>Taxa de adm. total <span id="lbl_taxa_adm">20%</span></label>
+        <input type="range" id="taxa_adm" min="5" max="30" step="0.5" value="20">
+        <div class="hint">Cobrada diluída nas parcelas mensais</div>
+      </div>
+      <div class="param">
+        <label>Fundo de reserva <span id="lbl_fundo_res">2%</span></label>
+        <input type="range" id="fundo_res" min="0" max="5" step="0.1" value="2">
+      </div>
+      <div class="param">
+        <label>Seguro (% a.a. sobre crédito) <span id="lbl_seguro">0.3%</span></label>
+        <input type="range" id="seguro" min="0" max="2" step="0.05" value="0.3">
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Inadimplência</h3>
+      <div class="param">
+        <label>Taxa de inadimplência mensal <span id="lbl_inadimplencia">2%</span></label>
+        <input type="range" id="inadimplencia" min="0" max="15" step="0.5" value="2">
+        <div class="hint">% dos participantes ativos que não pagam no mês</div>
+      </div>
+      <div class="param">
+        <label>Recuperação de inadimpl. <span id="lbl_recuperacao">40%</span></label>
+        <input type="range" id="recuperacao" min="0" max="100" step="5" value="40">
+        <div class="hint">% do inadimplente que regulariza no mês seguinte</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Contemplações</h3>
+      <div class="param">
+        <label>Sorteios por mês <span id="lbl_sorteios">2</span></label>
+        <input type="range" id="sorteios" min="1" max="10" step="1" value="2">
+      </div>
+      <div class="param">
+        <label>Lances aceitos p/ mês <span id="lbl_lances">1</span></label>
+        <input type="range" id="lances" min="0" max="10" step="1" value="1">
+      </div>
+      <div class="param">
+        <label>Lance médio (% do crédito) <span id="lbl_lance_pct">30%</span></label>
+        <input type="range" id="lance_pct" min="5" max="60" step="1" value="30">
+        <div class="hint">Lance embutido reduz o prazo efetivo do cotista</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Custos Fixos da Administradora (R$/mês)</h3>
+      <div class="param">
+        <label>Custo fixo mensal <span id="lbl_custo_fixo">5.000</span></label>
+        <input type="range" id="custo_fixo" min="0" max="100000" step="1000" value="5000">
+      </div>
+      <div class="param">
+        <label>Custo variável (% sobre arrecadação) <span id="lbl_custo_var">1.5%</span></label>
+        <input type="range" id="custo_var" min="0" max="10" step="0.1" value="1.5">
+      </div>
+      <div class="param">
+        <label>Rendimento do fundo (% a.m.) <span id="lbl_rendimento">0.8%</span></label>
+        <input type="range" id="rendimento" min="0" max="2" step="0.05" value="0.8">
+        <div class="hint">Rendimento sobre saldo do fundo comum</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpis" id="kpis"></div>
+
+  <!-- GRÁFICOS -->
+  <div class="charts-grid">
+    <div class="chart-card">
+      <h3>Resultado Operacional Acumulado (R$)</h3>
+      <canvas id="chartResultado" height="220"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Participantes Ativos × Contemplados Acumulados</h3>
+      <canvas id="chartParticipantes" height="220"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Arrecadação vs Custos Mensais (R$)</h3>
+      <canvas id="chartArrecadacao" height="220"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Fundo Comum Disponível (R$)</h3>
+      <canvas id="chartFundo" height="220"></canvas>
+    </div>
+  </div>
+
+  <!-- TABELA -->
+  <div class="table-wrap">
+    <h3>Fluxo Mensal Detalhado</h3>
+    <div class="table-scroll">
+      <table id="tabela">
+        <thead>
+          <tr>
+            <th>Mês</th>
+            <th>Partic. Ativos</th>
+            <th>Arrecad. Bruta</th>
+            <th>Receita Admin</th>
+            <th>Receita Lances</th>
+            <th>Contemplados</th>
+            <th>Contempl. Acum.</th>
+            <th>Inadimpl. (R$)</th>
+            <th>Fundo Comum</th>
+            <th>Rendim. Fundo</th>
+            <th>Custo Total</th>
+            <th>Resultado Mês</th>
+            <th>Resultado Acum.</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
 </div>
 
-<!-- ═══ AS DORES REAIS ═══ -->
-<section>
-  <div class="container">
-    <p class="section-label">Diagnóstico</p>
-    <h2 class="section-title">As dores reais do mercado de consórcio</h2>
-    <p class="section-sub">Um mercado que cresce 32% ao ano carregando processos da década de 90. Essas são as feridas abertas — com dados reais.</p>
+<script>
+const ids = ['participantes','prazo','credito','taxa_adm','fundo_res','seguro','inadimplencia','recuperacao','sorteios','lances','lance_pct','custo_fixo','custo_var','rendimento'];
+const charts = {};
 
-    <div class="grid g3">
+function fmt(v, decimals=0) {
+  return new Intl.NumberFormat('pt-BR', { minimumFractionDigits: decimals, maximumFractionDigits: decimals }).format(v);
+}
+function fmtR(v) {
+  const s = v < 0 ? '-' : '';
+  return s + 'R$ ' + fmt(Math.abs(v), 0);
+}
+function fmtP(v) { return fmt(v, 1) + '%'; }
 
-      <div class="pain-card">
-        <h3>🚨 Epidemia de Fraudes</h3>
-        <p>O "golpe do consórcio contemplado" explodiu. Criminosos se passam por contemplados para vender cotas inexistentes. Vítimas perdem R$100k–200k por caso. Administradoras não autorizadas operam sem registro no BACEN e somem com os pagamentos.</p>
-        <span class="data">Casos documentados em GO, RS e SE em 2025</span>
-      </div>
+function getParams() {
+  return {
+    N: +document.getElementById('participantes').value,
+    prazo: +document.getElementById('prazo').value,
+    credito: +document.getElementById('credito').value,
+    taxaAdm: +document.getElementById('taxa_adm').value / 100,
+    fundoRes: +document.getElementById('fundo_res').value / 100,
+    seguro: +document.getElementById('seguro').value / 100,
+    inadimp: +document.getElementById('inadimplencia').value / 100,
+    recuperacao: +document.getElementById('recuperacao').value / 100,
+    sorteios: +document.getElementById('sorteios').value,
+    lances: +document.getElementById('lances').value,
+    lancePct: +document.getElementById('lance_pct').value / 100,
+    custoFixo: +document.getElementById('custo_fixo').value,
+    custoVar: +document.getElementById('custo_var').value / 100,
+    rendimento: +document.getElementById('rendimento').value / 100,
+  };
+}
 
-      <div class="pain-card">
-        <h3>📞 Atendimento Arcaico</h3>
-        <p>80% dos problemas exigem atendente humano. Filas de espera longas, respostas inconsistentes entre canais e falta de contexto na conversa. Taxa de resolução do Procon-SP caiu de 31,7% (2023) para 29,1% (2024) — piorando mesmo com o mercado crescendo.</p>
-        <span class="data">+16% de reclamações fundamentadas em 2024</span>
-      </div>
+function simular(p) {
+  const parcela_base = p.credito / p.prazo;
+  const parcela_adm  = p.credito * p.taxaAdm / p.prazo;
+  const parcela_fr   = p.credito * p.fundoRes / p.prazo;
+  const parcela_seg  = p.credito * p.seguro / 12;
+  const parcela_total = parcela_base + parcela_adm + parcela_fr + parcela_seg;
 
-      <div class="pain-card">
-        <h3>📄 Documentação Manual</h3>
-        <p>Análise de crédito leva 2–5 dias úteis. Validação de documentos (renda, CPF, certidões) é feita manualmente, sujeita a erro humano e subdocumentação. Liberação da carta de crédito pode demorar semanas após contemplação.</p>
-        <span class="data">Estimativa: 35% do custo admin é retrabalho</span>
-      </div>
+  let ativos = p.N;
+  let contemp_acum = 0;
+  let fundo_comum = 0;
+  let resultado_acum = 0;
+  let inadimp_pendente = 0;
+  let breakeven_mes = null;
 
-      <div class="pain-card">
-        <h3>🎲 Sorteios Sem Transparência</h3>
-        <p>Consorciados não têm como auditar sorteios. A dependência de sistemas proprietários das administradoras gera desconfiança crônica. Processos judiciais de consorciados questionando irregularidades em assembleias são frequentes.</p>
-        <span class="data">Maior fonte de litígios no setor</span>
-      </div>
+  const rows = [];
 
-      <div class="pain-card">
-        <h3>💸 Taxas Altas sem Justificativa Clara</h3>
-        <p>Taxa de administração chega a 25% do valor total em consórcios imobiliários (prazo de 20 anos). Com processos digitalizados, esse custo poderia cair 40–60%. O consorciado paga caro por ineficiência operacional que não o beneficia.</p>
-        <span class="data">15–25% em imóveis · ~16% em veículos</span>
-      </div>
+  for (let m = 1; m <= p.prazo; m++) {
+    // Recuperação de inadimplência do mês anterior
+    const recuperado = inadimp_pendente * p.recuperacao;
+    inadimp_pendente = inadimp_pendente * (1 - p.recuperacao);
 
-      <div class="pain-card">
-        <h3>🔌 Zero Interoperabilidade</h3>
-        <p>Cada administradora tem seu próprio sistema. Não há portabilidade de cotas entre administradoras, nenhuma integração com Open Finance e reporting ao BACEN ainda é feito em formatos legados. O cliente é refém do sistema onde entrou.</p>
-        <span class="data">Sem padrão de dados no setor</span>
-      </div>
+    // Participantes que pagam este mês
+    const pagantes = Math.max(0, ativos - ativos * p.inadimp);
+    const novos_inadimp = ativos * p.inadimp;
+    inadimp_pendente += novos_inadimp * (parcela_base + parcela_fr);
 
+    // Contemplações
+    const contemp_mes = Math.min(p.sorteios + p.lances, ativos - contemp_acum);
+    contemp_acum += contemp_mes;
+
+    // Arrecadação
+    const arrec_bruta = pagantes * parcela_total + recuperado * parcela_total;
+    const receita_adm = pagantes * parcela_adm;
+    const receita_fr  = pagantes * parcela_fr;
+    const receita_seg = pagantes * parcela_seg;
+    const receita_lances = p.lances * p.credito * p.lancePct;
+
+    // Fundo comum: recebe parte base + fundo reserva, paga contemplações
+    const fundo_entrada = pagantes * (parcela_base + parcela_fr) + recuperado * (parcela_base + parcela_fr);
+    const fundo_saida   = contemp_mes * p.credito * (1 - p.lancePct);
+    const rendim_fundo  = fundo_comum * p.rendimento;
+    fundo_comum = fundo_comum + fundo_entrada + rendim_fundo - fundo_saida;
+    if (fundo_comum < 0) fundo_comum = 0;
+
+    // Custos da administradora
+    const custo_total = p.custoFixo + arrec_bruta * p.custoVar;
+
+    // Resultado da administradora (taxa adm + lances - custos)
+    const resultado_mes = receita_adm + receita_lances + rendim_fundo * 0.1 - custo_total;
+    resultado_acum += resultado_mes;
+
+    if (breakeven_mes === null && resultado_acum >= 0) breakeven_mes = m;
+
+    // Ativos reduz pelos contemplados que terminaram de pagar? Simplificação: ativos diminui pelos saídos
+    ativos = Math.max(0, ativos - contemp_mes * 0.3); // simplificação: contemplados saem gradualmente
+
+    rows.push({
+      m, ativos: Math.round(ativos), contemp_mes, contemp_acum,
+      arrec_bruta, receita_adm, receita_lances, inadimp: novos_inadimp * parcela_total,
+      fundo_comum, rendim_fundo, custo_total, resultado_mes, resultado_acum
+    });
+  }
+
+  return { rows, breakeven_mes, parcela_total, parcela_adm, parcela_fr, parcela_seg };
+}
+
+function renderKPIs(p, sim) {
+  const { rows, breakeven_mes, parcela_total } = sim;
+  const last = rows[rows.length - 1];
+  const receita_total = rows.reduce((a, r) => a + r.receita_adm + r.receita_lances, 0);
+  const custo_total_periodo = rows.reduce((a, r) => a + r.custo_total, 0);
+  const inadimp_total = rows.reduce((a, r) => a + r.inadimp, 0);
+
+  const kpis = document.getElementById('kpis');
+  kpis.innerHTML = `
+    <div class="kpi blue">
+      <div class="label">Parcela Mensal</div>
+      <div class="value">${fmtR(parcela_total)}</div>
+      <div class="sub">por cotista</div>
     </div>
-  </div>
-</section>
-
-<!-- ═══ PROVA DE MERCADO ═══ -->
-<section class="alt">
-  <div class="container">
-    <p class="section-label">Prova de Conceito</p>
-    <h2 class="section-title">Já funciona — a Klubi provou</h2>
-    <p class="section-sub">Antes de falar em teoria, existe uma fintech brasileira que já rodou o experimento. Os resultados são difíceis de ignorar.</p>
-
-    <div class="proof-bar">
-      <h3>Klubi — Fintech de Consórcio 100% Baseada em IA</h3>
-      <p>Carteira de R$ 1,3 bilhão gerenciada majoritariamente por inteligência artificial, sem o modelo tradicional de atendimento humano massivo.</p>
-      <div class="proof-stats">
-        <div class="proof-stat"><strong>94%</strong><span>das vendas feitas por IA</span></div>
-        <div class="proof-stat"><strong>80%</strong><span>dos problemas resolvidos por IA</span></div>
-        <div class="proof-stat"><strong>R$ 1,3 Bi</strong><span>sob gestão</span></div>
-        <div class="proof-stat"><strong>~0</strong><span>call center tradicional</span></div>
-      </div>
+    <div class="kpi ${breakeven_mes ? 'green' : 'red'}">
+      <div class="label">Breakeven</div>
+      <div class="value">${breakeven_mes ? 'Mês ' + breakeven_mes : 'Não atingido'}</div>
+      <div class="sub">${breakeven_mes ? 'Resultado acum. positivo' : 'Ajuste os parâmetros'}</div>
     </div>
-
-    <div style="margin-top: 24px;">
-      <div class="warning-box">
-        <div class="icon">💡</div>
-        <p><strong>O que isso prova:</strong> IA no consórcio não é ficção científica. É um modelo de negócio validado, com bilhões sob gestão, operando hoje no Brasil. A pergunta não é "se vai funcionar" — é "quem vai chegar primeiro nas grandes administradoras e seguradoras".</p>
-      </div>
+    <div class="kpi green">
+      <div class="label">Resultado Total</div>
+      <div class="value">${fmtR(last.resultado_acum)}</div>
+      <div class="sub">ao final do grupo</div>
     </div>
-  </div>
-</section>
-
-<!-- ═══ ONDE CLAUDE ENTRA ═══ -->
-<section>
-  <div class="container">
-    <p class="section-label">Oportunidades com IA</p>
-    <h2 class="section-title">Onde Claude resolve dores reais</h2>
-    <p class="section-sub">Não é sobre chatbot de FAQ. É sobre atacar os gargalos que custam dinheiro, geram litígio e destroem a experiência do cliente.</p>
-    <div class="grid g3">
-
-      <div class="card">
-        <div class="card-icon icon-purple">🛡️</div>
-        <h3>Detecção de Fraude em Tempo Real</h3>
-        <p>Claude analisa padrões de comportamento, documentos e histórico de transações para identificar cotas fraudulentas, cadastros suspeitos e operações fora do padrão — antes do prejuízo acontecer.</p>
-        <span class="badge badge-purple">ROI imediato · Implementação em 4–8 sem.</span>
-      </div>
-
-      <div class="card">
-        <div class="card-icon icon-purple">🤖</div>
-        <h3>Atendimento que Realmente Resolve</h3>
-        <p>Claude com acesso à base de dados da administradora responde sobre contemplação, lances, assembleias e documentação com contexto real do cliente — sem transferências, sem espera, 24/7.</p>
-        <span class="badge badge-purple">-60% custo de suporte · 80% resolução sem humano</span>
-      </div>
-
-      <div class="card">
-        <div class="card-icon icon-purple">📊</div>
-        <h3>Análise de Crédito em Minutos</h3>
-        <p>Processamento de documentos via OCR + IA, cruzamento com Open Finance, análise de renda e histórico. O que leva 3 dias passa a levar 3 minutos — com mais precisão e menos viés.</p>
-        <span class="badge badge-purple">3x mais rápido · -40% risco de inadimplência</span>
-      </div>
-
-      <div class="card">
-        <div class="card-icon icon-green">🎯</div>
-        <h3>Personalização de Oferta</h3>
-        <p>Com base no perfil financeiro (Open Finance), momento de vida e comportamento, Claude sugere grupo ideal, prazo e estratégia de lance. Menos abandono, mais conversão.</p>
-        <span class="badge badge-green">+25–30% conversão em vendas</span>
-      </div>
-
-      <div class="card">
-        <div class="card-icon icon-green">📢</div>
-        <h3>Comunicação Proativa e Inteligente</h3>
-        <p>Notificações personalizadas de assembleia, alerta de vencimento, lembrete de lance estratégico e comunicação de contemplação — no canal certo, na hora certa, com a linguagem do cliente.</p>
-        <span class="badge badge-green">-25% inadimplência · +NPS</span>
-      </div>
-
-      <div class="card">
-        <div class="card-icon icon-green">⚖️</div>
-        <h3>Compliance Automatizado com BACEN</h3>
-        <p>Monitoramento contínuo de conformidade, geração de relatórios regulatórios e alertas de desvio — sem necessidade de time de compliance dedicado para operações rotineiras.</p>
-        <span class="badge badge-green">Reduz risco regulatório · Escala sem custo</span>
-      </div>
-
+    <div class="kpi blue">
+      <div class="label">Receita Admin Total</div>
+      <div class="value">${fmtR(receita_total)}</div>
+      <div class="sub">taxa adm + lances</div>
     </div>
-  </div>
-</section>
-
-<!-- ═══ BLOCKCHAIN ═══ -->
-<section class="alt">
-  <div class="container">
-    <p class="section-label">A Camada Seguinte</p>
-    <h2 class="section-title">Blockchain e Smart Contracts:<br>faz sentido no consórcio?</h2>
-    <p class="section-sub">Sim — e mais do que em qualquer outro produto financeiro. O consórcio tem uma estrutura natural de contratos, grupos e regras que mapeiam perfeitamente para smart contracts. Veja os casos reais.</p>
-
-    <div class="grid g3" style="margin-bottom: 40px;">
-
-      <div class="chain-card">
-        <div class="stars">★★★★★</div>
-        <h3>Sorteios e Lances On-Chain</h3>
-        <p>O maior gerador de desconfiança no setor. Um smart contract executa o sorteio automaticamente com randomness verificável (Chainlink VRF). Resultado auditável por qualquer consorciado, imutável, sem possibilidade de manipulação.</p>
-        <span class="chain-pill">Elimina litígios · Confiança máxima</span>
-      </div>
-
-      <div class="chain-card">
-        <div class="stars">★★★★★</div>
-        <h3>Carta de Crédito como Token</h3>
-        <p>A carta de crédito emitida como token ERC-20 em blockchain permissioned. Transferência peer-to-peer entre consorciados com rastreabilidade total. Fraude do "consórcio contemplado" torna-se matematicamente impossível — o token ou existe na chain ou não existe.</p>
-        <span class="chain-pill">Acaba com fraude de repasse</span>
-      </div>
-
-      <div class="chain-card">
-        <div class="stars">★★★★☆</div>
-        <h3>Assembleias com Votação Registrada</h3>
-        <p>Assembleias mensais com quórum, votos e decisões registradas on-chain. Imutável, auditável, acessível a todos os membros do grupo. Acaba com disputas sobre legitimidade de decisões e simplifica processos de governance.</p>
-        <span class="chain-pill">Governança transparente</span>
-      </div>
-
-      <div class="chain-card">
-        <div class="stars">★★★★☆</div>
-        <h3>Pagamentos Automáticos (DeFi)</h3>
-        <p>Quando o consorciado é contemplado, o smart contract libera a carta de crédito automaticamente após validação dos critérios. Sem intermediários, sem delay, sem risco de "esquecimento". Integração direta com PIX ou stablecoin BRL.</p>
-        <span class="chain-pill">Zero delay na contemplação</span>
-      </div>
-
-      <div class="chain-card">
-        <div class="stars">★★★★☆</div>
-        <h3>Fundo Reserva Descentralizado</h3>
-        <p>O fundo de cobertura de inadimplência do grupo gerido por smart contract. Regras de acionamento, pagamento e replenishment transparentes e automáticas. Reduz necessidade de supervisão humana e aumenta confiança dos participantes.</p>
-        <span class="chain-pill">Pool de risco transparente</span>
-      </div>
-
-      <div class="chain-card">
-        <div class="stars">★★★☆☆</div>
-        <h3>Tokenização de Ativos do Consórcio</h3>
-        <p>Imóveis e veículos que serão adquiridos com a carta de crédito podem ser tokenizados para fracionamento, liquidez secundária e uso como colateral DeFi. Abre mercado secundário de cotas que hoje não existe.</p>
-        <span class="chain-pill">Mercado secundário de cotas</span>
-      </div>
-
+    <div class="kpi orange">
+      <div class="label">Inadimplência Total Est.</div>
+      <div class="value">${fmtR(inadimp_total)}</div>
+      <div class="sub">${fmtP(inadimp_total / (rows.reduce((a,r)=>a+r.arrec_bruta,0) || 1) * 100)} da arrecadação</div>
     </div>
-
-    <div class="warning-box">
-      <div class="icon">⚠️</div>
-      <p><strong>Desafio regulatório:</strong> O BACEN ainda não tem framework específico para blockchain em consórcios. A Lei 11.795/2008 precisa de atualização. A estratégia inteligente é começar com blockchain permissioned (Hyperledger Fabric) para auditabilidade interna, avançar para piloto regulatório sandbox do BACEN, e só depois escalar on-chain público. A Lei de Liberdade Econômica (13.874/2019) já abre caminho para smart contracts como instrumentos jurídicos válidos.</p>
+    <div class="kpi blue">
+      <div class="label">Fundo Comum Final</div>
+      <div class="value">${fmtR(last.fundo_comum)}</div>
+      <div class="sub">saldo no encerramento</div>
     </div>
-  </div>
-</section>
-
-<!-- ═══ MATRIZ ═══ -->
-<section>
-  <div class="container">
-    <p class="section-label">Priorização</p>
-    <h2 class="section-title">Matriz de oportunidades</h2>
-    <p class="section-sub">Ordenada por impacto real e velocidade de implementação — da mais imediata à mais transformadora.</p>
-
-    <table class="matrix">
-      <thead>
-        <tr>
-          <th>Iniciativa</th>
-          <th>Tecnologia</th>
-          <th>Impacto</th>
-          <th>Prazo</th>
-          <th>Regulação</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Atendimento inteligente 24/7</strong></td>
-          <td>Claude API + RAG</td>
-          <td><span class="level l-high">Muito Alto</span></td>
-          <td>4–8 semanas</td>
-          <td><span class="level l-ok">Livre</span></td>
-        </tr>
-        <tr>
-          <td><strong>Detecção de fraude em tempo real</strong></td>
-          <td>Claude + ML + OCR</td>
-          <td><span class="level l-high">Muito Alto</span></td>
-          <td>6–10 semanas</td>
-          <td><span class="level l-ok">Livre</span></td>
-        </tr>
-        <tr>
-          <td><strong>Análise de crédito automatizada</strong></td>
-          <td>Claude + Open Finance</td>
-          <td><span class="level l-high">Alto</span></td>
-          <td>8–12 semanas</td>
-          <td><span class="level l-ok">Livre</span></td>
-        </tr>
-        <tr>
-          <td><strong>Compliance BACEN automatizado</strong></td>
-          <td>Claude + pipelines</td>
-          <td><span class="level l-high">Alto</span></td>
-          <td>6–10 semanas</td>
-          <td><span class="level l-ok">Livre</span></td>
-        </tr>
-        <tr>
-          <td><strong>Sorteios auditáveis on-chain</strong></td>
-          <td>Smart Contract + Chainlink VRF</td>
-          <td><span class="level l-high">Muito Alto</span></td>
-          <td>12–20 semanas</td>
-          <td><span class="level l-reg">Sandbox BACEN</span></td>
-        </tr>
-        <tr>
-          <td><strong>Carta de crédito tokenizada</strong></td>
-          <td>ERC-20 + blockchain permissioned</td>
-          <td><span class="level l-high">Transformador</span></td>
-          <td>20–30 semanas</td>
-          <td><span class="level l-reg">Requer norma BACEN</span></td>
-        </tr>
-        <tr>
-          <td><strong>Mercado secundário de cotas</strong></td>
-          <td>DeFi + tokenização</td>
-          <td><span class="level l-med">Alto</span></td>
-          <td>6–12 meses</td>
-          <td><span class="level l-low">Alta complexidade</span></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<!-- ═══ ROADMAP ═══ -->
-<section class="alt">
-  <div class="container">
-    <p class="section-label">Execução</p>
-    <h2 class="section-title">Roadmap de 12 meses</h2>
-    <p class="section-sub">Uma sequência que respeita a realidade regulatória e entrega ROI em cada fase.</p>
-
-    <div style="max-width: 700px;">
-      <div class="roadmap">
-
-        <div class="rm-item">
-          <div class="rm-line">
-            <div class="rm-dot dot-1">1</div>
-            <div class="rm-connector"></div>
-          </div>
-          <div class="rm-content">
-            <span class="rm-tag phase-1">Meses 1–3 · Quick Wins</span>
-            <h4>IA no Atendimento e Antifraude</h4>
-            <p>Deploy de Claude com RAG sobre a base de conhecimento da administradora. Pipeline de detecção de fraude em cadastros e documentos. ROI mensurável em 30 dias.</p>
-          </div>
-        </div>
-
-        <div class="rm-item">
-          <div class="rm-line">
-            <div class="rm-dot dot-1">2</div>
-            <div class="rm-connector"></div>
-          </div>
-          <div class="rm-content">
-            <span class="rm-tag phase-1">Meses 3–6 · Core Operations</span>
-            <h4>Análise de Crédito + Open Finance + Compliance</h4>
-            <p>Integração com Open Finance para análise de renda em tempo real. Automação de compliance com BACEN. Comunicação proativa com consorciados via WhatsApp/email.</p>
-          </div>
-        </div>
-
-        <div class="rm-item">
-          <div class="rm-line">
-            <div class="rm-dot dot-2">3</div>
-            <div class="rm-connector"></div>
-          </div>
-          <div class="rm-content">
-            <span class="rm-tag phase-2">Meses 6–9 · Blockchain Interno</span>
-            <h4>Auditabilidade On-Chain (Hyperledger)</h4>
-            <p>Registro de sorteios e assembleias em blockchain permissioned (Hyperledger Fabric). Sem exposição pública, sem risco regulatório. Transparência interna e rastreabilidade completa.</p>
-          </div>
-        </div>
-
-        <div class="rm-item">
-          <div class="rm-line">
-            <div class="rm-dot dot-3">4</div>
-          </div>
-          <div class="rm-content">
-            <span class="rm-tag phase-3">Meses 9–12 · Sandbox Regulatório</span>
-            <h4>Piloto Smart Contracts com BACEN</h4>
-            <p>Engajar BACEN e ABAC no sandbox regulatório. Piloto com 1–2 grupos (1.000–5.000 participantes) usando smart contracts para sorteios e carta de crédito tokenizada. First-mover advantage real.</p>
-          </div>
-        </div>
-
-      </div>
+    <div class="kpi ${last.resultado_acum / receita_total * 100 >= 0 ? 'green' : 'red'}">
+      <div class="label">Margem Operacional</div>
+      <div class="value">${fmtP(receita_total > 0 ? last.resultado_acum / receita_total * 100 : 0)}</div>
+      <div class="sub">resultado / receita total</div>
     </div>
-  </div>
-</section>
-
-<!-- ═══ QUOTE ═══ -->
-<div style="padding: 80px 24px; background: var(--bg);">
-  <div class="container">
-    <div class="quote-block">
-      <blockquote>"O consórcio é o único produto financeiro em massa onde a confiança é o produto. Smart contracts não são uma feature — são a solução estrutural para a crise de credibilidade do setor."</blockquote>
-      <cite>— Análise de mercado · Claude + Consórcio Brasileiro · 2026</cite>
+    <div class="kpi blue">
+      <div class="label">Arrecadação Total</div>
+      <div class="value">${fmtR(rows.reduce((a,r)=>a+r.arrec_bruta,0))}</div>
+      <div class="sub">volume bruto do grupo</div>
     </div>
-  </div>
-</div>
+  `;
+}
 
-<footer>
-  <strong>Claude + Consórcio Brasileiro</strong> · Dados: ABAC, BACEN, Procon-SP, InfoMoney · Gerado com Claude Code · Anthropic · 2026
-</footer>
+function renderCharts(sim) {
+  const { rows, breakeven_mes } = sim;
+  const labels = rows.map(r => 'M' + r.m);
 
+  const colors = { green: '#057a55', red: '#e02424', blue: '#1a56db', orange: '#c27803', gray: '#9ca3af' };
+
+  function makeChart(id, cfg) {
+    if (charts[id]) charts[id].destroy();
+    charts[id] = new Chart(document.getElementById(id), cfg);
+  }
+
+  // Resultado acumulado
+  makeChart('chartResultado', {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Resultado Acumulado',
+        data: rows.map(r => r.resultado_acum),
+        borderColor: rows.map(r => r.resultado_acum >= 0 ? colors.green : colors.red),
+        backgroundColor: 'rgba(5,122,85,0.08)',
+        borderWidth: 2, pointRadius: 0, tension: 0.3, fill: true
+      }]
+    },
+    options: { plugins: { legend: { display: false } }, scales: { y: { ticks: { callback: v => 'R$' + fmt(v/1000) + 'k' } } } }
+  });
+
+  // Participantes
+  makeChart('chartParticipantes', {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Ativos', data: rows.map(r => r.ativos), borderColor: colors.blue, borderWidth: 2, pointRadius: 0, tension: 0.3 },
+        { label: 'Contemplados Acum.', data: rows.map(r => r.contemp_acum), borderColor: colors.green, borderWidth: 2, pointRadius: 0, tension: 0.3 }
+      ]
+    },
+    options: { plugins: { legend: { position: 'top' } }, scales: { y: {} } }
+  });
+
+  // Arrecadação vs Custos
+  makeChart('chartArrecadacao', {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Receita Admin', data: rows.map(r => r.receita_adm + r.receita_lances), backgroundColor: 'rgba(26,86,219,0.7)', stack: 'a' },
+        { label: 'Custos', data: rows.map(r => -r.custo_total), backgroundColor: 'rgba(224,36,36,0.6)', stack: 'b' }
+      ]
+    },
+    options: { plugins: { legend: { position: 'top' } }, scales: { y: { ticks: { callback: v => 'R$' + fmt(v/1000) + 'k' } } } }
+  });
+
+  // Fundo comum
+  makeChart('chartFundo', {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Fundo Comum',
+        data: rows.map(r => r.fundo_comum),
+        borderColor: colors.orange, backgroundColor: 'rgba(194,120,3,0.08)',
+        borderWidth: 2, pointRadius: 0, tension: 0.3, fill: true
+      }]
+    },
+    options: { plugins: { legend: { display: false } }, scales: { y: { ticks: { callback: v => 'R$' + fmt(v/1000) + 'k' } } } }
+  });
+}
+
+function renderTable(sim) {
+  const { rows, breakeven_mes } = sim;
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = rows.map(r => `
+    <tr class="${r.m === breakeven_mes ? 'breakeven-row' : ''}">
+      <td>${r.m}${r.m === breakeven_mes ? ' ✓' : ''}</td>
+      <td>${fmt(r.ativos)}</td>
+      <td>${fmtR(r.arrec_bruta)}</td>
+      <td>${fmtR(r.receita_adm)}</td>
+      <td>${fmtR(r.receita_lances)}</td>
+      <td>${r.contemp_mes}</td>
+      <td>${r.contemp_acum}</td>
+      <td class="neg">${fmtR(r.inadimp)}</td>
+      <td>${fmtR(r.fundo_comum)}</td>
+      <td>${fmtR(r.rendim_fundo)}</td>
+      <td class="neg">${fmtR(r.custo_total)}</td>
+      <td class="${r.resultado_mes >= 0 ? 'pos' : 'neg'}">${fmtR(r.resultado_mes)}</td>
+      <td class="${r.resultado_acum >= 0 ? 'pos' : 'neg'}">${fmtR(r.resultado_acum)}</td>
+    </tr>
+  `).join('');
+}
+
+function atualizar() {
+  const p = getParams();
+  const sim = simular(p);
+  renderKPIs(p, sim);
+  renderCharts(sim);
+  renderTable(sim);
+}
+
+// Labels em tempo real
+ids.forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener('input', () => {
+    const lbl = document.getElementById('lbl_' + id);
+    if (!lbl) return atualizar();
+    const v = +el.value;
+    if (['participantes','prazo','sorteios','lances'].includes(id)) lbl.textContent = fmt(v);
+    else if (id === 'credito' || id === 'custo_fixo') lbl.textContent = fmt(v);
+    else lbl.textContent = fmtP(v);
+    atualizar();
+  });
+});
+
+atualizar();
+</script>
 </body>
 </html>

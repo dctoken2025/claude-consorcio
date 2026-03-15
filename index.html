@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Claude no Mercado de Consórcio — Oportunidades</title>
+  <style>
+    :root {
+      --brand: #6C47FF;
+      --brand-dark: #4A2FD6;
+      --brand-light: #EDE9FF;
+      --accent: #00C9A7;
+      --text: #1A1A2E;
+      --muted: #6B7280;
+      --bg: #F9FAFB;
+      --white: #FFFFFF;
+      --card-shadow: 0 4px 24px rgba(108,71,255,0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--brand) 0%, #4A2FD6 60%, #1A1A2E 100%);
+      color: white;
+      padding: 80px 24px 100px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 999px;
+      padding: 6px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.15;
+      max-width: 800px;
+      margin: 0 auto 20px;
+    }
+    .hero h1 span { color: #A5F3E8; }
+    .hero p {
+      font-size: 1.2rem;
+      opacity: 0.85;
+      max-width: 600px;
+      margin: 0 auto 40px;
+    }
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      margin-top: 48px;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat strong {
+      display: block;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #A5F3E8;
+    }
+    .stat span { font-size: 0.9rem; opacity: 0.75; }
+
+    /* ── CONTAINER ── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── SECTION ── */
+    section { padding: 80px 0; }
+    section:nth-child(even) { background: white; }
+
+    .section-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--brand);
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 800;
+      margin-bottom: 14px;
+      line-height: 1.2;
+    }
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 600px;
+      margin-bottom: 56px;
+    }
+
+    /* ── GRID CARDS ── */
+    .grid { display: grid; gap: 24px; }
+    .grid-3 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+    .grid-2 { grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: var(--card-shadow);
+      border: 1px solid #F0ECFF;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(108,71,255,0.14);
+    }
+    .card-icon {
+      width: 52px;
+      height: 52px;
+      background: var(--brand-light);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+    .card p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+    .card .tag {
+      display: inline-block;
+      margin-top: 14px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: var(--brand-light);
+      color: var(--brand);
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+
+    /* ── BEFORE/AFTER ── */
+    .ba-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; border-radius: 20px; overflow: hidden; }
+    .ba-col { padding: 36px; }
+    .ba-before { background: #FFF1F1; }
+    .ba-after { background: #F0FFF8; }
+    .ba-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 20px; }
+    .ba-before .ba-label { color: #EF4444; }
+    .ba-after .ba-label { color: #10B981; }
+    .ba-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 14px; font-size: 0.95rem; }
+    .ba-item .dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 7px; flex-shrink: 0; }
+    .ba-before .dot { background: #EF4444; }
+    .ba-after .dot { background: #10B981; }
+
+    /* ── ROI TABLE ── */
+    .roi-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    .roi-table th {
+      background: var(--brand);
+      color: white;
+      padding: 14px 20px;
+      text-align: left;
+      font-weight: 600;
+    }
+    .roi-table th:first-child { border-radius: 10px 0 0 0; }
+    .roi-table th:last-child { border-radius: 0 10px 0 0; }
+    .roi-table td { padding: 14px 20px; border-bottom: 1px solid #F0ECFF; }
+    .roi-table tr:last-child td { border-bottom: none; }
+    .roi-table tr:nth-child(even) td { background: var(--brand-light); }
+    .roi-pill {
+      display: inline-block;
+      background: #DCFCE7;
+      color: #16A34A;
+      font-weight: 700;
+      font-size: 0.8rem;
+      padding: 2px 10px;
+      border-radius: 999px;
+    }
+
+    /* ── QUOTE ── */
+    .quote-section {
+      background: linear-gradient(135deg, var(--brand) 0%, #4A2FD6 100%);
+      color: white;
+      text-align: center;
+      padding: 80px 24px;
+    }
+    .quote-section blockquote {
+      font-size: clamp(1.3rem, 2.5vw, 2rem);
+      font-weight: 700;
+      max-width: 700px;
+      margin: 0 auto 20px;
+      line-height: 1.4;
+    }
+    .quote-section cite {
+      opacity: 0.7;
+      font-size: 0.9rem;
+      font-style: normal;
+    }
+
+    /* ── CTA ── */
+    .cta-section { background: var(--brand-light); text-align: center; }
+    .cta-btn {
+      display: inline-block;
+      background: var(--brand);
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 16px 40px;
+      border-radius: 12px;
+      text-decoration: none;
+      margin-top: 32px;
+      transition: background 0.2s;
+    }
+    .cta-btn:hover { background: var(--brand-dark); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--text);
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 28px 24px;
+      font-size: 0.85rem;
+    }
+    footer strong { color: white; }
+
+    @media (max-width: 640px) {
+      .ba-grid { grid-template-columns: 1fr; }
+      .hero-stats { gap: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Inteligência Artificial · Mercado de Consórcio</div>
+  <h1>Claude pode <span>transformar</span> o mercado de consórcio brasileiro</h1>
+  <p>De atendimento ao contemplado a análise de risco — veja onde a IA já muda o jogo.</p>
+  <div class="hero-stats">
+    <div class="stat"><strong>R$ 400 Bi+</strong><span>em créditos ativos no país</span></div>
+    <div class="stat"><strong>9 milhões</strong><span>de participantes ativos</span></div>
+    <div class="stat"><strong>+35%</strong><span>crescimento anual do setor</span></div>
+  </div>
+</div>
+
+<!-- OPORTUNIDADES -->
+<section>
+  <div class="container">
+    <p class="section-tag">Oportunidades</p>
+    <h2 class="section-title">Onde Claude entra no consórcio</h2>
+    <p class="section-sub">Seis frentes de alto impacto que a IA pode atacar imediatamente — com tecnologia disponível hoje.</p>
+    <div class="grid grid-3">
+
+      <div class="card">
+        <div class="card-icon">🤖</div>
+        <h3>Atendimento Inteligente 24/7</h3>
+        <p>Claude responde dúvidas complexas sobre contemplação, lances, regras de grupo e documentação — em linguagem natural, a qualquer hora, sem fila.</p>
+        <span class="tag">Reduz 70% dos tickets</span>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">📊</div>
+        <h3>Análise de Crédito e Risco</h3>
+        <p>Processamento de documentos, análise de renda, histórico e comportamento para sugestão de grupos e limites. Decisões mais rápidas e precisas.</p>
+        <span class="tag">-40% inadimplência</span>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🎯</div>
+        <h3>Personalização de Oferta</h3>
+        <p>Com base no perfil do cliente, Claude sugere o melhor grupo, prazo e valor de lance — aumentando a conversão e a satisfação.</p>
+        <span class="tag">+25% conversão</span>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">📄</div>
+        <h3>Automação de Documentos</h3>
+        <p>Leitura, extração e validação automática de contratos, laudos, certidões e comprovantes. O que levava dias, passa a levar segundos.</p>
+        <span class="tag">95% menos trabalho manual</span>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">📢</div>
+        <h3>Comunicação Proativa</h3>
+        <p>Notificações personalizadas sobre assembleias, datas de lance, vencimento de parcelas e status de contemplação — no canal certo, na hora certa.</p>
+        <span class="tag">Reduz inadimplência</span>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🔍</div>
+        <h3>Prevenção a Fraudes</h3>
+        <p>Detecção de padrões suspeitos em cadastros, documentos e movimentações. Claude analisa em segundos o que um analista levaria horas.</p>
+        <span class="tag">Detecção em tempo real</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ANTES / DEPOIS -->
+<section>
+  <div class="container">
+    <p class="section-tag">Transformação</p>
+    <h2 class="section-title">Antes e depois da IA no consórcio</h2>
+    <p class="section-sub">Uma comparação direta do dia a dia das administradoras com e sem Claude.</p>
+    <div class="ba-grid">
+      <div class="ba-col ba-before">
+        <p class="ba-label">❌ Sem IA</p>
+        <div class="ba-item"><div class="dot"></div><span>Atendente responde mesmas dúvidas repetidamente</span></div>
+        <div class="ba-item"><div class="dot"></div><span>Análise de crédito leva 2–5 dias úteis</span></div>
+        <div class="ba-item"><div class="dot"></div><span>Documentos validados manualmente, sujeitos a erro</span></div>
+        <div class="ba-item"><div class="dot"></div><span>Cliente descobre contemplação por extrato bancário</span></div>
+        <div class="ba-item"><div class="dot"></div><span>Fraudes identificadas após o prejuízo</span></div>
+        <div class="ba-item"><div class="dot"></div><span>Oferta genérica, sem personalização</span></div>
+      </div>
+      <div class="ba-col ba-after">
+        <p class="ba-label">✅ Com Claude</p>
+        <div class="ba-item"><div class="dot"></div><span>Claude resolve 70% das dúvidas automaticamente</span></div>
+        <div class="ba-item"><div class="dot"></div><span>Análise de crédito em minutos, com score contextual</span></div>
+        <div class="ba-item"><div class="dot"></div><span>OCR + IA valida documentos em segundos</span></div>
+        <div class="ba-item"><div class="dot"></div><span>Notificação proativa assim que assembleia encerra</span></div>
+        <div class="ba-item"><div class="dot"></div><span>Padrões suspeitos sinalizados em tempo real</span></div>
+        <div class="ba-item"><div class="dot"></div><span>Recomendação personalizada por perfil e momento</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROI TABLE -->
+<section>
+  <div class="container">
+    <p class="section-tag">Impacto Estimado</p>
+    <h2 class="section-title">ROI por área de aplicação</h2>
+    <p class="section-sub">Estimativas conservadoras baseadas em casos reais de IA em serviços financeiros.</p>
+    <table class="roi-table">
+      <thead>
+        <tr>
+          <th>Área</th>
+          <th>Solução com Claude</th>
+          <th>Impacto Estimado</th>
+          <th>Prazo de Implementação</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Atendimento ao cliente</td>
+          <td>Chatbot com Claude + base de conhecimento</td>
+          <td><span class="roi-pill">-60% custo de suporte</span></td>
+          <td>4–8 semanas</td>
+        </tr>
+        <tr>
+          <td>Análise de crédito</td>
+          <td>Pipeline de documentos + scoring por IA</td>
+          <td><span class="roi-pill">3x mais rápido</span></td>
+          <td>8–12 semanas</td>
+        </tr>
+        <tr>
+          <td>Vendas / conversão</td>
+          <td>Personalização de oferta em tempo real</td>
+          <td><span class="roi-pill">+20–30% conversão</span></td>
+          <td>6–10 semanas</td>
+        </tr>
+        <tr>
+          <td>Prevenção de fraudes</td>
+          <td>Análise comportamental e documental</td>
+          <td><span class="roi-pill">-35% fraudes</span></td>
+          <td>10–16 semanas</td>
+        </tr>
+        <tr>
+          <td>Gestão de inadimplência</td>
+          <td>Comunicação proativa + negociação guiada</td>
+          <td><span class="roi-pill">-25% inadimplência</span></td>
+          <td>4–6 semanas</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<div class="quote-section">
+  <blockquote>"O consórcio vende confiança e planejamento. Claude entrega exatamente isso — na escala que nenhum humano consegue sozinho."</blockquote>
+  <cite>— Perspectiva sobre IA no setor financeiro brasileiro</cite>
+</div>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <p class="section-tag">Próximos Passos</p>
+    <h2 class="section-title">Por onde começar?</h2>
+    <p class="section-sub">Não é necessário transformar tudo de uma vez. Um piloto focado em atendimento ou análise de crédito já entrega ROI em menos de 60 dias.</p>
+    <div class="grid grid-3" style="margin-top: 40px;">
+      <div class="card">
+        <div class="card-icon">1️⃣</div>
+        <h3>Diagnóstico</h3>
+        <p>Mapear os maiores gargalos: onde a equipe perde mais tempo? Onde o cliente abandona?</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">2️⃣</div>
+        <h3>Piloto</h3>
+        <p>Escolher uma frente (ex: atendimento), implementar Claude com sua base de dados e medir por 30 dias.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">3️⃣</div>
+        <h3>Escalar</h3>
+        <p>Com evidências em mão, expandir para outras áreas com segurança e previsibilidade de ROI.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <strong>Claude + Consórcio</strong> · Gerado com Claude Code · Anthropic · 2026
+</footer>
+
+</body>
+</html>
